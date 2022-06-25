@@ -1,8 +1,10 @@
 package com.exam.models;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,14 +13,17 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.Id;
 
 
-
+@JsonIgnoreProperties({  "commandes","paniers" })
 @Entity
-public class produit {
+public class produit implements Serializable {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="produit_id")
 	public Long id;
 	public String name;
 	public String description;
@@ -26,14 +31,25 @@ public class produit {
 	
 	
 	@ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "category_id")
-	private category categorie;
+    @JoinColumn(name = "category_id",nullable=false)
+	public category categorie;
 	
-	@ManyToMany(mappedBy="Achats")
-	private Collection<user> acheteurs;
+	@Override
+	public String toString() {
+		return "produit [id=" + id + ", name=" + name + ", description=" + description + ", price=" + price
+				+ ", categorie=" + categorie + ", commandes=" + commandes + ", paniers=" + paniers + "]";
+	}
+	public category getCategorie() {
+		return categorie;
+	}
+	public void setCategorie(category categorie) {
+		this.categorie = categorie;
+	}
+	@OneToMany(mappedBy="produit")
+	public Collection<commande> commandes;
 	
-	@ManyToMany(mappedBy="produits")
-	private Collection<panier> paniers;
+	@OneToMany(mappedBy="produit")
+	public Collection<panier> paniers;
 	public String getName() {
 		return name;
 	}

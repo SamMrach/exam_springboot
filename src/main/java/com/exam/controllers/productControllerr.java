@@ -16,14 +16,14 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.exam.models.produit;
-import com.exam.models.user;
+import com.exam.models.Client;
 import com.exam.repositories.produitRepository;
-import com.exam.repositories.userRepository;
+import com.exam.repositories.clientRepository;
 
 @Controller
-public class productController {
+public class productControllerr {
 	@Autowired
-    private produitRepository productsRepository;
+     produitRepository productsRepository;
 	@GetMapping("/products")
 	public String getAllProducts(Model model){
 		model.addAttribute("products",productsRepository.findAll());
@@ -43,10 +43,12 @@ public class productController {
 		
 		return "updateProduct";
 	}
+	/*
 	@PutMapping("/products/edit/{id}")
 	public String UpdateProduct(@PathVariable long id,@RequestBody produit productDetails){
+        
 		produit produit = produitRepository.findById(id)
-				.orElseThrow();
+				.orElse(null);
 		produit.setName(productDetails.name);
 		produit.setDescription(productDetails.description);
 		produit.setPrice(productDetails.price);
@@ -54,7 +56,7 @@ public class productController {
 		produit updatedUser = productsRepository.save(produit);
 		return "redirect:/products";
 		
-	}
+	}*/
 	@GetMapping("/products/add")
 	public String addProduct(Model model) {
 		produit produit=new produit();
